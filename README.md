@@ -2,6 +2,6 @@
 The purpose of the simulation was to research the distribution of students based on different strategies and abilities
 of the institutions. Including interview strategies.
 I plan to revive this project, 
-#### Current status: Mid refactoring, untouched for several years.
+#### Current status: Mid refactoring, Last touch ~2010.
 #### Plan: complete refactoring and looking for research partner.
 
