@@ -1,0 +1,48 @@
+#Starting Variables
+
+
+
+
+
+
+
+
+#Applicant variables
+#Number of applicants
+NumApp = 1000
+#Number of Intitutions applicants apply to
+NumApplyTo = 10
+#Applicant grade, mean and standard deviation will be drawn from a normal
+AScoreM = 50
+AScoreS = 2
+#Error added to grades, This will be added to the true grades, this is what the institutions observe.
+#Apply-to and minumum at institution
+AplyRang=[-30,20] # this is the percentile range they will apply to. If set to -100+100 you will get all.
+AScoreE = 0
+AScoreES = 10
+AppScore
+AppScoreE
+AppPer
+AppPerE
+AppAplyL
+AppInterL
+
+#Institution Variables
+#Number of Institutions
+NumInst = 100
+#number each institution is accepting
+NumAccept = 10
+#institution grade, mean and standard deviation, will be drawn from a normal
+IqualityM = 50
+IqualityS = 15
+#Error grades this is what the applicants error, not the true grade.
+IqualityE = 0
+IqualityES = 10
+InstMin=-40 # probably should be less than the min AplyRang
+InstQual
+InstQualWE
+InstPer
+AppInterL
+AppAplyL
+Inst_Applicant_List # This will be a list of the applicants that applied to the program.
+ira=[] #This will be the ranking list of the applicanst to the program.
