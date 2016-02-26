@@ -108,7 +108,12 @@ class Institution(object):
 
     def _Postinterview_sort(self, applist):
         """Preinterview sorting of applicants"""
-        postinterview = lambda app: (app.quality * app.observed_1 * app.observed_2 * self.observe_1 * self.observe_2)
+        try:
+            postinterview = lambda app: (app.quality * app.observed_1 * app.observed_2 * self.observe_1 * self.observe_2)
+        except Exception as e:
+            print(e)
+            print('Values are {}, {}, {}, {}, {}'.format(app.quality * app.observed_1 * app.observed_2 * self.observe_1 * self.observe_2))
+            raise
         applist.sort(key=postinterview, reverse=1)
         # return applist
 

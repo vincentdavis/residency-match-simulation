@@ -61,17 +61,17 @@ class TestApplicant(unittest.TestCase):
                          'desired '+str(len(desired))+' != '+ 'Actual '+str(len(actual)))
 
 
-    def test_rank_interviewed_inst(self):
-        """Select institions that will be ranked"""
-        app=App()
-        app.quality = 50
-        app.num_applied_to = 5
-        app.observe = 1
-        app.applied_to_range = [.4, 1.2]
-        app.apply_list(setup_inst())
-        desired = {'i40', 'i50', 'i60', 'i70'}
-        actual = set([inst.name for inst in app.applied_to])
-        self.assertEqual(actual, desired)
+    # def test_rank_interviewed_inst(self):
+    #     """Select institions that will be ranked"""
+    #     app=App()
+    #     app.quality = 50
+    #     app.num_applied_to = 5
+    #     app.observe = 1
+    #     app.applied_to_range = [.4, 1.2]
+    #     app.apply_list(setup_inst())
+    #     desired = {'i40', 'i50', 'i60', 'i70'}
+    #     actual = set([inst.name for inst in app.applied_to])
+    #     self.assertEqual(actual, desired)
 
 
     def test_sort_rank_interviewed_inst(self):
