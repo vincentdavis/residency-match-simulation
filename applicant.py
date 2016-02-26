@@ -1,5 +1,6 @@
 import random as r
 
+
 class Applicant(object):
     """
     This class represents an applicant and their attributes and decisions.
@@ -62,6 +63,7 @@ class Applicant(object):
     matched_inst_rank : Ther applicants rank of the instituion tha applicant is 
                         matched to
     """
+
     def __init__(self):
         self.quality = max(min(r.gauss(50, 20), 100), 1)
         self.observe = 1
@@ -89,13 +91,11 @@ class Applicant(object):
         rankl = self.rank_inst[:]
         notmatch = self.not_matched_to[:]
         assert rankl[0:len(notmatch)] == notmatch, 'rankl[0:len(notmatch)] == notmatch'
-        if rankl[len(notmatch):] == []:
-            self.failed_to_match=True
+        if not rankl[len(notmatch):]:
+            self.failed_to_match = True
             return None
         else:
-            return rankl[len(notmatch):len(notmatch)+1][0]
-
-
+            return rankl[len(notmatch):len(notmatch) + 1][0]
 
     def apply_list(self, instlist):
         """Determin the institutions the applicant will apply to.
@@ -104,47 +104,49 @@ class Applicant(object):
         # Lower and upper bounds of institution that will be applied to
         lowerb = self.quality * self.applied_to_range[0]
         upperb = self.quality * self.applied_to_range[1]
-        while len(temp) < self.num_applied_to: # Make sure they apply to at least num_applied_to
+        while len(temp) < self.num_applied_to:  # Make sure they apply to at least num_applied_to
             for inst in instlist:
-                observed_quality = inst.quality * inst.observed_1 * self.observe #Don't really need self.observe as it effects all the same
-                if ((lowerb <= observed_quality) and (observed_quality <= upperb)):
+                observed_quality = inst.quality * inst.observed_1 * self.observe  # Don't really need self.observe as it effects all the same
+                if (lowerb <= observed_quality) and (observed_quality <= upperb):
                     temp.append(inst)
             if len(temp) < self.num_applied_to:
-                lowerb = lowerb * .9
-                upperb = upperb * 1.1
+                lowerb *= .9
+                upperb *= 1.1
                 if self.verbose:
-                    print('Applicant '+str(sel.name)+' increased '+'applied_to_range')
+                    print('Applicant ' + str(sel.name) + ' increased ' + 'applied_to_range')
             elif len(temp) == self.num_applied_to:
                 self.applied_to = temp
             else:
-#TODO: should this list be sorted and then selected from in order?
-                self.applied_to = r.sample(temp, self.num_applied_to) # Randomly choose from the acceptable list
+                # TODO: should this list be sorted and then selected from in order?
+                self.applied_to = r.sample(temp, self.num_applied_to)  # Randomly choose from the acceptable list
         for inst in self.applied_to:
-#TODO: need to test these cross class updates
+            # TODO: need to test these cross class updates
             inst.applied.append(self)
         assert len(self.applied_to) >= self.num_applied_to, 'len(self.applied_to) >= self.num_applied_to'
 
     def rank_interviewed_inst(self, instlist):
         """ Choose to rank in consideration of interview """
-        if len(instlist)==0: self.failed_to_match = True
-        lowerb = self.quality * self.applied_to_range[0] # only exlude from ranking based on lower bound
-        while (len(self.rank_inst) < self.num_to_rank) and not(self.failed_to_match):
+        if len(instlist) == 0:
+            self.failed_to_match = True
+        lowerb = self.quality * self.applied_to_range[0]  # only exlude from ranking based on lower bound
+        while (len(self.rank_inst) < self.num_to_rank) and not self.failed_to_match:
             for inst in instlist:
-                observed_quality = inst.quality * inst.observed_1 * inst.observed_2 * self.observe # elf.observe could be random or other non constant
-                if (observed_quality >= lowerb):
+                observed_quality = inst.quality * inst.observed_1 * inst.observed_2 * self.observe  # elf.observe could be random or other non constant
+                if observed_quality >= lowerb:
                     self.rank_inst.append(inst)
                 else:
                     self.not_rank_inst.append(inst)
                 assert (inst in self.not_rank_inst) or (inst in self.rank_inst), '(inst in self.not_rank_inst) or (inst in self.rank_inst)'
-            if  len(self.rank_inst) < self.num_to_rank:
+            if len(self.rank_inst) < self.num_to_rank:
                 if self.verbose:
-                    print('Applicant '+str(self.name)+' lowered rank expectation from'+str(lowerb)+' to'+str(lowerb*.9))
-                if lowerb < .00000000001: self.failed_to_match = True
-                lowerb = lowerb*.9 # Lower the expectations of the applicant
-        assert (len(self.rank_inst) >= self.num_to_rank or self.failed_to_match), 'It should not be that len(app.rank_inst) >= self.num_to_rank '+str(self.name)
+                    print('Applicant ' + str(self.name) + ' lowered rank expectation from' + str(lowerb) + ' to' + str(lowerb * .9))
+                if lowerb < .00000000001:
+                    self.failed_to_match = True
+                lowerb *= .9  # Lower the expectations of the applicant
+        assert (len(self.rank_inst) >= self.num_to_rank or self.failed_to_match), 'It should not be that len(app.rank_inst) >= self.num_to_rank ' + str(self.name)
 
     def sort_rank_interviewed_inst(self):
-#TOD0: Need a better name, for this method, maybe should be part of rank_interviewed_inst
+        # TOD0: Need a better name, for this method, maybe should be part of rank_interviewed_inst
         """
         Sorts the list of institutions that where chosen to rank.
         This is then the rank order.
@@ -152,8 +154,10 @@ class Applicant(object):
         List index position 0 is the best ranked
         don't worry about ties
         """
-#TODO: Need to check the sort order
+
+        # TODO: Need to check the sort order
         def make_key(inst):
             return inst.quality * inst.observed_1 * inst.observed_2
-        self.rank_inst.sort(key=make_key, reverse=1)
-        #self.try_inst = [x for x in self.rank_inst] #used for the match
+
+        self.rank_inst.sort(key=make_key, reverse=True)
+        # self.try_inst = [x for x in self.rank_inst] #used for the match

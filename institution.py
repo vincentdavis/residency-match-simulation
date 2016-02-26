@@ -1,5 +1,5 @@
-
 import random as r
+
 
 class Institution(object):
     """
@@ -50,7 +50,7 @@ class Institution(object):
     """
 
     def __init__(self):
-    # Defualt initilazation values
+        # Defualt initilazation values
         self.quality = None
         self.openings = None
         self.number_to_interview = None
@@ -59,51 +59,58 @@ class Institution(object):
         self.observed_1 = None
         self.observed_2 = None
         self.num_to_rank = None
-        #self.obs_at_apply = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * self.observe_1)
-        #self.obs_at_rank = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * apps_to_rank[app].observed_2 * self.observe_1 *self.observe_2)
-        self.applied = [] # list of applicants that applied
-        self.reject_applicant = [] # Rejected applicant, do not interview.
-        self.invite_interview = [] # Invite applicant to interview.
-        self.rank_list = [] # List of applicants ranked, 0 highest, 400 low
-        self.matched_to = [] # List of applicants that have matched to the institution
-        self.bumped_applicants = [] # List of applicants that where bumped from the institution
-#TODO: how does this get filled,ranked_to_low
+        # self.obs_at_apply = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * self.observe_1)
+        # self.obs_at_rank = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * apps_to_rank[app].observed_2 * self.observe_1 *self.observe_2)
+        self.applied = []  # list of applicants that applied
+        self.reject_applicant = []  # Rejected applicant, do not interview.
+        self.invite_interview = []  # Invite applicant to interview.
+        self.rank_list = []  # List of applicants ranked, 0 highest, 400 low
+        self.matched_to = []  # List of applicants that have matched to the institution
+        self.bumped_applicants = []  # List of applicants that where bumped from the institution
+        # TODO: how does this get filled,ranked_to_low
         self.ranked_to_low = []
 
-# This section are some usefull values/calculations
+    # This section are some usefull values/calculations
 
     def Matched_to_count(self):
         """The number of applicats that have matched to the institution"""
         return len(self.matched_to)
+
     def Space_avalible(self):
         """Are there still empty spots avalible at the institution"""
-        return (self.openings - len(self.matched_to))
+        return self.openings - len(self.matched_to)
+
     def Apps_still_can_try(self):
         """This is the list of applicats that have not been proposed in the
         match proccess to the institution"""
-        return [x for x in self.rank_list if x not in self.matched_to and x not in self.bumped_applicants and x not in self.ranked_to_low ]
+        return [x for x in self.rank_list if x not in self.matched_to and x not in self.bumped_applicants and x not in self.ranked_to_low]
+
     def Lowest_rank(self):
         """finds the lowest ranked applicatn that is currently matched,returns the applicant and the rank"""
         rank = max([self.rank_list.index(x) for x in self.matched_to])
         app = self.rank_list[rank]
         return [rank, app]
+
     def Get_applicant_rank(self, app):
         """ calculates the applicants rank"""
         return self.rank_list.index(app)
+
     def _Bump_applicant(self, app):
         """Bumps an applicant that was matched, send message back to applicant instance"""
         self.matched_to.remove(app)
         self.bumped_applicants.append(app)
+
     def _Preinterview_sort(self, applist):
         """Preinterview sorting of applicants"""
         preinterview = lambda app: (app.quality * app.observed_1 * self.observe_1)
         applist.sort(key=preinterview, reverse=1)
-        #return applist
+        # return applist
+
     def _Postinterview_sort(self, applist):
         """Preinterview sorting of applicants"""
-        postinterview = lambda app: (app.quality * app.observed_1 * app.observed_2 * self.observe_1 *self.observe_2)
+        postinterview = lambda app: (app.quality * app.observed_1 * app.observed_2 * self.observe_1 * self.observe_2)
         applist.sort(key=postinterview, reverse=1)
-        #return applist
+        # return applist
 
     def interview(self, applist):
         """
@@ -111,13 +118,13 @@ class Institution(object):
         (number_to_interview). If more than that apply then they do not invite
         the least qualified applicants. Invites are based on applicant.observe_1
         """
-        if len(applist) <= self.number_to_interview: # Has the insitution recieved to many interview requests
-            self.invite_interview = applist[:] # interview all that applied
+        if len(applist) <= self.number_to_interview:  # Has the insitution recieved to many interview requests
+            self.invite_interview = applist[:]  # interview all that applied
         else:
-            self._Preinterview_sort(applist) # sort the applicant list.
-            self.invite_interview = applist[0:self.number_to_interview] # take the best from the sorted applicant list
-            self.reject_applicant = applist[self.number_to_interview: ]
-        assert ((len(self.invite_interview) + len(self.reject_applicant)) == 
+            self._Preinterview_sort(applist)  # sort the applicant list.
+            self.invite_interview = applist[0:self.number_to_interview]  # take the best from the sorted applicant list
+            self.reject_applicant = applist[self.number_to_interview:]
+        assert ((len(self.invite_interview) + len(self.reject_applicant)) ==
                 len(applist)), '# applicants = number interview+number rejected'
         for app in self.invite_interview:
             app.interviewed_at.append(self)
@@ -129,8 +136,8 @@ class Institution(object):
         There is no strategy always rank by observed quality.
         """
         self._Postinterview_sort(apps_to_rank)
-#TODO: need to filter the list based on self.accept_range
-        #filter((self.observer_at_rank(apps_to_rank[x])) <= self.accept_range[0])
+        # TODO: need to filter the list based on self.accept_range
+        # filter((self.observer_at_rank(apps_to_rank[x])) <= self.accept_range[0])
         self.rank_list = apps_to_rank
 
     def Proposed_applicant(self, applicant):
@@ -140,22 +147,22 @@ class Institution(object):
         app_to_bump = None
         # These lines are to help catch errors
         assert applicant in self.Apps_still_can_try(), \
-               'Applicant '+ str(applicant.name) +' not in the list of still can try'
+            'Applicant ' + str(applicant.name) + ' not in the list of still can try'
         assert (self.Space_avalible() > 0 or
                 self.Lowest_rank()[0] > self.Get_applicant_rank(applicant) or
                 self.Lowest_rank()[0] < self.Get_applicant_rank(applicant)), \
-               'Proposed_applicant error'
-        if self.Space_avalible() > 0: # The institution has not yet filled.
+            'Proposed_applicant error'
+        if self.Space_avalible() > 0:  # The institution has not yet filled.
             app_matched = True
             applicant.matched_to = self
-        elif self.Lowest_rank()[0] > self.Get_applicant_rank(applicant): # Applicant can bump the lowest matched applicant
+        elif self.Lowest_rank()[0] > self.Get_applicant_rank(applicant):  # Applicant can bump the lowest matched applicant
             app_matched = True
             app_to_bump = self.Lowest_rank()[1]
             self._Bump_applicant(app_to_bump)
             applicant.matched_to = self
             assert app_to_bump not in self.matched_to, 'app_to_bump not in self.matched_to'
             assert app_to_bump in self.bumped_applicants, 'app_to_bump in self.bumped_applicants'
-        else: #Applicant fails to match at institution
+        else:  # Applicant fails to match at institution
             assert self.Lowest_rank()[0] < self.Get_applicant_rank(applicant)
             app_matched = False
             self.ranked_to_low.append(applicant)
