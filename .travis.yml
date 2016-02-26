@@ -1,0 +1,23 @@
+
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "nightly" # currently points to 3.6-dev
+  - "pypy"
+  - "pypy3"
+
+  
+# command to install dependencies
+install:
+  - pip install codecov
+# command to run tests
+script:
+  - coverage  run  --omit 'seqs/tests/*.*' -m py.test
+
+notifications:
+  email: false
+
+after_success:
+  - codecov
