@@ -25,7 +25,7 @@ class TestInstitution(unittest.TestCase):
         inst.observe_2 = 1
         inst.number_to_interview = 5
         inst.interview(setup_app())
-        desired = set(['foo']) # Need to determin the right answer
+        desired = {'foo'}  # Need to determin the right answer
         actual = set([app.name for app in inst.invite_interview])
         print('actual 1',actual)
         self.assertEqual(desired, actual,
@@ -66,9 +66,9 @@ class TestInstitution(unittest.TestCase):
         inst.ranked_to_low = []
         inst.openings = 5
         results = inst.Proposed_applicant(apps[6])
-        self.assertEqual((results[0] and results[1]==None), True, 
-                         'There was room, applicant should have been accepted'+
-                         str(results[0]) + ' ' +str(results[1]))
+        self.assertEqual((results[0] and results[1] is None), True,
+                         'There was room, applicant should have been accepted' +
+                         str(results[0]) + ' ' + str(results[1]))
         
     def test_Proposed_applicant_2(self):
         """Proposed_applicant_2: Institution is filled applicant can bump lowest
@@ -103,7 +103,7 @@ class TestInstitution(unittest.TestCase):
         inst.ranked_to_low = []
         inst.openings = 4
         results = inst.Proposed_applicant(inst.rank_list[4])
-        self.assertEqual((not(results[0]) and results[1]==None), True, 
+        self.assertEqual((not(results[0]) and results[1] is None), True,
                          ('Applicant should have matched '+
                          str(results[0]) + ' ' +str(results[1])))
 
