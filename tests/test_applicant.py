@@ -29,20 +29,20 @@ class TestApplicant(unittest.TestCase):
         self.assertEqual(desired, actual,
                          'desired '+str(desired)+' != '+ 'Actual '+str(actual))
 
-    # def test_apply_list2(self):
-    #     '''Setup 2: number to apply to > number in desired range
-    #     range will be expanded
-    #     '''
-    #     app = App()
-    #     app.quality = 50
-    #     app.num_applied_to = 5
-    #     app.observe = 1
-    #     app.applied_to_range = [.8, 1.2]
-    #     app.apply_list(setup_inst())
-    #     desired = set(['i30', 'i40', 'i50', 'i60', 'i70'])
-    #     actual = set([inst.name for inst in app.applied_to])
-    #     self.assertEqual(desired, actual,
-    #                      'desired '+str(desired)+' != '+ 'Actual '+str(actual))
+    def test_apply_list2(self):
+        '''Setup 2: number to apply to > number in desired range
+        range will be expanded
+        '''
+        app = App()
+        app.quality = 50
+        app.num_applied_to = 5
+        app.observe = 1
+        app.applied_to_range = [.8, 1.2]
+        app.apply_list(setup_inst())
+        desired = set(['i50', 'i60', 'i70', 'i80'])
+        actual = set([inst.name for inst in app.applied_to])
+        self.assertEqual(desired, actual,
+                         'desired '+str(desired)+' != '+ 'Actual '+str(actual))
 
     def test_apply_list3(self):
         """Setup 3: number to apply to < number in desired range.
@@ -61,17 +61,17 @@ class TestApplicant(unittest.TestCase):
                          'desired '+str(len(desired))+' != '+ 'Actual '+str(len(actual)))
 
 
-    # def test_rank_interviewed_inst(self):
-    #     """Select institions that will be ranked"""
-    #     app=App()
-    #     app.quality = 50
-    #     app.num_applied_to = 5
-    #     app.observe = 1
-    #     app.applied_to_range = [.4, 1.2]
-    #     app.apply_list(setup_inst())
-    #     desired = {'i40', 'i50', 'i60', 'i70'}
-    #     actual = set([inst.name for inst in app.applied_to])
-    #     self.assertEqual(actual, desired)
+    def test_rank_interviewed_inst(self):
+        """Select institions that will be ranked"""
+        app=App()
+        app.quality = 50
+        app.num_applied_to = 5
+        app.observe = 1
+        app.applied_to_range = [.4, 1.2]
+        app.apply_list(setup_inst())
+        desired = {'i30','i40', 'i50', 'i60', 'i70'}
+        actual = set([inst.name for inst in app.applied_to])
+        self.assertEqual(actual, desired)
 
 
     def test_sort_rank_interviewed_inst(self):
