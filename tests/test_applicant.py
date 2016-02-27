@@ -7,7 +7,7 @@ def setup_inst():
     for qualty in [100,20,90,80,50,30,40,10,70,60]:
         name = Inst()
         name.quality = qualty
-        name.observed_1 = .8
+        name.observed_1 = 1
         name.observed_2 = 1.25
         name.name = 'i'+str(qualty)
         instlist.append(name)

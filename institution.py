@@ -54,10 +54,10 @@ class Institution(object):
         self.quality = None
         self.openings = None
         self.number_to_interview = None
-        self.observe_1 = None
-        self.observe_2 = None
-        self.observed_1 = None
-        self.observed_2 = None
+        self.observe_1 = 1
+        self.observe_2 = 1
+        self.observed_1 = 1
+        self.observed_2 = 1
         self.num_to_rank = None
         # self.obs_at_apply = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * self.observe_1)
         # self.obs_at_rank = lambda app: (apps_to_rank[app].quality * apps_to_rank[app].observed_1 * apps_to_rank[app].observed_2 * self.observe_1 *self.observe_2)
@@ -117,20 +117,20 @@ class Institution(object):
         applist.sort(key=postinterview, reverse=1)
         # return applist
 
-    def interview(self, applist):
+    def interview(self):
         """
         The first condition is to interview as many as they wish to
         (number_to_interview). If more than that apply then they do not invite
         the least qualified applicants. Invites are based on applicant.observe_1
         """
-        if len(applist) <= self.number_to_interview:  # Has the insitution recieved to many interview requests
-            self.invite_interview = applist[:]  # interview all that applied
+        if len(self.applied) <= self.number_to_interview:  # Does the number of applicats excede the number they wish to interview
+            self.invite_interview = self.applied[:]  # interview all that applied
         else:
-            self._Preinterview_sort(applist)  # sort the applicant list.
-            self.invite_interview = applist[0:self.number_to_interview]  # take the best from the sorted applicant list
-            self.reject_applicant = applist[self.number_to_interview:]
+            self._Preinterview_sort(self.applied)  # sort the applicant list.
+            self.invite_interview = self.applied[0:self.number_to_interview]  # take the best from the sorted applicant list
+            self.reject_applicant = self.applied[self.number_to_interview:]
         assert ((len(self.invite_interview) + len(self.reject_applicant)) ==
-                len(applist)), '# applicants = number interview+number rejected'
+                len(self.applied)), '# applicants = number interview+number rejected'
         for app in self.invite_interview:
             app.interviewed_at.append(self)
 

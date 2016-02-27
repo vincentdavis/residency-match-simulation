@@ -7,31 +7,41 @@ def setup_app():
     for qualty in [100,20,90,80,50,30,40,10,70,60]:
         name = App()
         name.quality = qualty
-        name.observed_1 = .8
-        name.observed_2 = 1.25
         name.name = 'a'+str(qualty)
         applist.append(name)
     return applist
 
 class TestInstitution(unittest.TestCase):
 
-    def test_interview(self):
+    def test_interview_many(self):
         """
         Interview selection Test 1: , number that apply > number to interview
         """
         inst = Inst()
         inst.quality = 50
-        inst.observe_1 = 1
-        inst.observe_2 = 1
         inst.number_to_interview = 5
-        inst.interview(setup_app())
-        desired = {'a100', 'a60', 'a80', 'a90', 'a70'}  # TODO Need to determin the right answer
+        inst.applied = setup_app()
+        inst.interview()
+        desired = {'a100', 'a60', 'a80', 'a90', 'a70'}
         actual = set([app.name for app in inst.invite_interview])
-        print('actual 1',actual)
         self.assertEqual(desired, actual,
                          'desired '+str(desired)+' != '+ 'Actual '+str(actual))
-#TODO: need to make sure the applicants that interviewed are updated.
-    # for app in self.invite_interview: app.interviewed_at.append(self)
+
+
+    def test_interview_few(self):
+        """
+        Interview selection Test 1: , number that apply < number to interview
+        """
+        inst = Inst()
+        inst.quality = 50
+        inst.number_to_interview = 10
+        inst.applied = setup_app()[:5]
+        inst.interview()
+        desired = {'a20', 'a90', 'a100', 'a50', 'a80'}
+        actual = set([app.name for app in inst.invite_interview])
+        self.assertEqual(desired, actual,
+                         'desired '+str(desired)+' != '+ 'Actual '+str(actual))
+
 
     def test_inst_rank_app(self):
         """
@@ -39,8 +49,6 @@ class TestInstitution(unittest.TestCase):
         """
         inst = Inst()
         inst.quality = 50
-        inst.observe_1 = 1
-        inst.observe_2 = 1
         inst.num_to_rank = 5
         inst.accept_range = [.5, 1000]
 #TODO: need to filter based on inst.accept_range
@@ -60,8 +68,6 @@ class TestInstitution(unittest.TestCase):
         apps = setup_app()
         #setup institution
         inst = Inst()
-        inst.observe_1 = 1
-        inst.observe_2 = 1
         inst.matched_to = [apps[5], apps[3]]
         #inst.rank_list = apps Next line takes care of this
         inst.inst_rank_app(apps)
@@ -81,8 +87,6 @@ class TestInstitution(unittest.TestCase):
         #setup institution
         inst = Inst()
         #inst.rank_list = apps Next line takes care of this
-        inst.observe_1 = 1
-        inst.observe_2 = 1
         inst.inst_rank_app(apps)
         inst.matched_to = [inst.rank_list[0], inst.rank_list[2], 
                            inst.rank_list[4], inst.rank_list[6]]
@@ -100,8 +104,6 @@ class TestInstitution(unittest.TestCase):
         apps = setup_app()
         #setup institution
         inst = Inst()
-        inst.observe_1 = 1
-        inst.observe_2 = 1
         #inst.rank_list = apps Next line takes care of this
         inst.inst_rank_app(apps)
         inst.matched_to = [inst.rank_list[0], inst.rank_list[1], 
