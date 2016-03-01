@@ -1,6 +1,4 @@
-
 from peewee import *
-
 database = SqliteDatabase('match.db')
 
 class BaseModel(Model):
@@ -28,4 +26,4 @@ class Match(BaseModel):
     inst = ForeignKeyField(Institution)
     app_rank_inst = IntegerField(null=True)
     inst_rank_app = IntegerField(null=True)
-    matched = IntegerField(default=-1)
+    matched = IntegerField(default=-1, null=True)
