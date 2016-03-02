@@ -24,6 +24,8 @@ class Institution(BaseModel):
 class Match(BaseModel):
     app = ForeignKeyField(Applicant)
     inst = ForeignKeyField(Institution)
+    req_interview = IntegerField(default=-1, null=True)
+    inst_interview = IntegerField(null=True)
     app_rank_inst = IntegerField(null=True)
     inst_rank_app = IntegerField(null=True)
     matched = IntegerField(default=-1, null=True)
