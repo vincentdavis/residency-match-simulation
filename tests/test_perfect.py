@@ -12,7 +12,7 @@ class testperfect_1(TestCase):
         database.create_tables([Applicant, Institution, Match])
 
     def create_applicants(applicant):
-        count = 500
+        count = 50
         for a in range(count):
             app = applicant.create(name='A'+str(a+1), quality=(100/count)*(a+1),
                                    apply=1, visit=1, marketing=1, applylimit=100)
@@ -34,8 +34,10 @@ class testperfect_1(TestCase):
                 m.inst_interview = 1
                 m.save()
 
-    def rank_inst(self):
-        pass
+    def rank_inst(match, institution, applicant):
+        for i in institution:
+            for m in match.select().where(match.inst == i).order_by(match.app.quality):
+                print('Name: {} , Quality: {}'.format(match.app.quality, applicant.app.quality))
 
     def rank_app(self):
         pass
@@ -43,5 +45,5 @@ class testperfect_1(TestCase):
     create_intitution(Institution)
     request_interview(Applicant, Institution)
     invite_interview (Match)
-
+    rank_inst(Match, Institution, Applicant)
 
