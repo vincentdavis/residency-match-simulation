@@ -35,9 +35,19 @@ class testperfect_1(TestCase):
                 m.save()
 
     def rank_inst(match, institution, applicant):
+        applist = []
         for i in institution:
-            for m in match.select().where(match.inst == i).order_by(match.app.quality):
-                print('Name: {} , Quality: {}'.format(match.app.quality, applicant.app.quality))
+            for m in match.select().where(match.inst == i):
+                #print('Name: {} , Quality: {}'.format(applicant.name), str(applicant.quality))
+                applist.append(applicant.get(applicant.id == m.app_id))
+                print(applist)
+
+
+
+
+
+
+
 
     def rank_app(self):
         pass
